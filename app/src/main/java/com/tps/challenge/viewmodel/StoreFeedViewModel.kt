@@ -19,6 +19,10 @@ class StoreFeedViewModel @Inject constructor(
     val storesData: LiveData<List<StoreResponse>>
         get() = _storesData
 
+    init {
+        fetchStoresData()
+    }
+
     fun fetchStoresData() {
         viewModelScope.launch(Dispatchers.IO) {
             try {

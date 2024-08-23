@@ -48,7 +48,6 @@ class StoreFeedFragment : Fragment() {
                 swipeRefreshLayout.isRefreshing = false
             }
         })
-        viewModel.fetchStoresData()
 
         swipeRefreshLayout.setOnRefreshListener {
             Log.i(TAG, "onRefresh called from SwipeRefreshLayout")
