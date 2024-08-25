@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Technical Challenge</string>
+    <string name="network_error">Network error occurred, please check your network and pull to refresh the data.</string>
 </resources>
