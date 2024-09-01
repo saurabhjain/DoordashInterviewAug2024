@@ -16,7 +16,7 @@ import com.tps.challenge.network.model.StoreResponse
 /**
  * A RecyclerView.Adapter to populate the screen with a store feed.
  */
-class StoreFeedAdapter: RecyclerView.Adapter<StoreItemViewHolder>() {
+class StoreFeedAdapter: RecyclerView.Adapter<StoreItemViewHolder>(), Favorite {
 
     var stores = listOf<StoreResponse>()
 
@@ -33,6 +33,15 @@ class StoreFeedAdapter: RecyclerView.Adapter<StoreItemViewHolder>() {
     }
 
     override fun getItemCount() = stores.size
+
+
+    override fun favoriteItem() {
+
+    }
+}
+
+interface Favorite {
+    fun favoriteItem()
 }
 
 /**
