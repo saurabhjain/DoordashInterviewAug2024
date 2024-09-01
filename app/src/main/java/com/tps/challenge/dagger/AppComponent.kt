@@ -1,5 +1,6 @@
 package com.tps.challenge.dagger
 
+import com.tps.challenge.DetailsActivity
 import com.tps.challenge.TCApplication
 import com.tps.challenge.features.storefeed.StoreFeedFragment
 import dagger.Component
@@ -17,4 +18,5 @@ interface AppComponent {
 
     fun inject(app: TCApplication)
     fun inject(storeFeedFragment: StoreFeedFragment)
+    fun inject(detailsActivity: DetailsActivity)
 }
