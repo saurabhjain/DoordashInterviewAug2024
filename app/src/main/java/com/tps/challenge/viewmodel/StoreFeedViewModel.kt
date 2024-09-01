@@ -3,6 +3,7 @@ package com.tps.challenge.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.tps.challenge.Constants
 import com.tps.challenge.network.TPSCoroutineService
@@ -32,6 +33,17 @@ class StoreFeedViewModel @Inject constructor(
                 _storesData.postValue(listOf())
             }
         }
+    }
+
+    fun updateFavState(id: String, isFav: Boolean): LiveData<List<StoreResponse>> {
+        viewModelScope.launch {
+            try {
+                _storesData.map { it.singleOrNull{ store -> store.id == id}?.fav = isFav }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return storesData
     }
 
 }

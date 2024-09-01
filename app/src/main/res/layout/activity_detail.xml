@@ -15,12 +15,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
+    <ToggleButton
+        android:id="@+id/btn_fav_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_address"
+        android:layout_marginTop="@dimen/margin_16"
+        />
+
     <ImageView
         android:id="@+id/iv_photo"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
-        app:layout_constraintTop_toBottomOf="@id/tv_address"
+        android:layout_marginTop="@dimen/margin_16"
+        app:layout_constraintTop_toBottomOf="@id/btn_fav_detail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

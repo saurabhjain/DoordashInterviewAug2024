@@ -8,4 +8,5 @@ object Constants {
     const val DEFAULT_LATITUDE = 37.422740
     const val DEFAULT_LONGITUDE = -122.139956
     const val INTENT_ID = "ID"
+    const val INTENT_FAV_STATE = "FAV"
 }

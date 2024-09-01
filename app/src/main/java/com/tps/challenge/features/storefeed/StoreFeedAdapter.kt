@@ -5,14 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.ToggleButton
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.tps.challenge.Constants
 import com.tps.challenge.DetailsActivity
-import com.tps.challenge.MainActivity
 import com.tps.challenge.R
 import com.tps.challenge.network.model.StoreResponse
 
@@ -47,10 +44,16 @@ class StoreItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             findViewById<TextView>(R.id.name).text = item.name
             findViewById<TextView>(R.id.description).text = item.description
 
+            findViewById<ToggleButton>(R.id.btn_fav).setOnCheckedChangeListener { _, isChecked ->
+                findViewById<ToggleButton>(R.id.btn_fav).isChecked = isChecked
+            }
+
             findViewById<ConstraintLayout>(R.id.item_root).setOnClickListener {
                 val intent = Intent(itemView.context, DetailsActivity::class.java)
                 intent.putExtra(Constants.INTENT_ID, item.id)
+                intent.putExtra(Constants.INTENT_FAV_STATE, findViewById<ToggleButton>(R.id.btn_fav).isChecked)
                 itemView.context.startActivity(intent)
+
             }
         }
     }
