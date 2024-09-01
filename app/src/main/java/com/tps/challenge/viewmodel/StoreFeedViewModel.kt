@@ -12,7 +12,6 @@ import repository.StoreRepository
 import javax.inject.Inject
 
 class StoreFeedViewModel @Inject constructor(
-    private val service: TPSCoroutineService,
     private val repository: StoreRepository
 ) : ViewModel() {
 
@@ -25,7 +24,7 @@ class StoreFeedViewModel @Inject constructor(
     }
 
     private fun getAllStoresFromDB() {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             try {
                 _storesData.value = repository.getAllStoresFromDB()
                 if(_storesData.value?.isEmpty() == true) {
@@ -39,7 +38,7 @@ class StoreFeedViewModel @Inject constructor(
     }
 
     fun fetchAndGetStoresData() {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             try {
                 // sort by name
                 val storesList = repository.fetchStoresList()
@@ -51,7 +50,7 @@ class StoreFeedViewModel @Inject constructor(
                 }
                 else {
                     // insert into db
-                    repository.insertAllEmployeesInDB(storesList)
+                    repository.insertAllStoresInDB(storesList)
                     //  _storesData.value = employeeList
                     // Read from db after the insert
                     getAllStoresFromDB()

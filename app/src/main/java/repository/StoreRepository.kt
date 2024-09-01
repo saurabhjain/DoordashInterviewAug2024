@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class StoreRepository @Inject constructor(private val applicationContext: Context?,
+class StoreRepository @Inject constructor(private val applicationContext: Context,
                                           private val service: TPSCoroutineService) {
 
     suspend fun fetchStoresList(): List<StoreResponse> {
@@ -25,17 +25,17 @@ class StoreRepository @Inject constructor(private val applicationContext: Contex
     suspend fun getAllStoresFromDB(): List<StoreResponse>? {
         return withContext(Dispatchers.IO) {
             try {
-                AppDatabase.getDataBase(applicationContext!!).storesListDao().getAllStores()
+                AppDatabase.getDataBase(applicationContext).storesListDao().getAllStores()
             } catch (e: Exception) {
                 throw e
             }
         }
     }
 
-    suspend fun insertAllEmployeesInDB(employees: List<StoreResponse>) {
+    suspend fun insertAllStoresInDB(employees: List<StoreResponse>) {
         return withContext(Dispatchers.IO) {
             try {
-                AppDatabase.getDataBase(applicationContext!!).storesListDao().insertAll(employees)
+                AppDatabase.getDataBase(applicationContext).storesListDao().insertAll(employees)
             } catch (e: Exception) {
                 throw e
             }

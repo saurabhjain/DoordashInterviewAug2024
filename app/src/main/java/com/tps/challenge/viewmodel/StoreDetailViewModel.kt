@@ -13,8 +13,7 @@ import repository.StoreRepository
 import javax.inject.Inject
 
 class StoreDetailViewModel @Inject constructor(
-    private val service: TPSCoroutineService,
-    private val repository: StoreRepository
+    private val service: TPSCoroutineService
 ) : ViewModel() {
 
     private val _storeDetailData: MutableLiveData<StoreDetailsResponse> = MutableLiveData<StoreDetailsResponse>()
