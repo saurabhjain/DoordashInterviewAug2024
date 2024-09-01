@@ -55,7 +55,7 @@ class StoreFeedFragment : Fragment() {
         })
 
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.fetchStoresData()
+            viewModel.fetchAndGetStoresData()
         }
     }
 

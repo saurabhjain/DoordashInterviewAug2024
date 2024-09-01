@@ -9,10 +9,12 @@ import com.tps.challenge.network.TPSCoroutineService
 import com.tps.challenge.network.model.StoreDetailsResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import repository.StoreRepository
 import javax.inject.Inject
 
 class StoreDetailViewModel @Inject constructor(
-    private val service: TPSCoroutineService
+    private val service: TPSCoroutineService,
+    private val repository: StoreRepository
 ) : ViewModel() {
 
     private val _storeDetailData: MutableLiveData<StoreDetailsResponse> = MutableLiveData<StoreDetailsResponse>()
