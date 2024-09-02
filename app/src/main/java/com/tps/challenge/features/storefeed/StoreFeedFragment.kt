@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.tps.challenge.R
 import com.tps.challenge.TCApplication
 import com.tps.challenge.ViewModelFactory
+import com.tps.challenge.features.storefeed.StoreFeedAdapter.ItemClickListener
 import com.tps.challenge.viewmodel.StoreFeedViewModel
 import javax.inject.Inject
 
@@ -31,15 +32,15 @@ class StoreFeedFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory<StoreFeedViewModel>
 
+    val viewModel: StoreFeedViewModel by lazy {
+        viewModelFactory.get<StoreFeedViewModel>(
+            requireActivity()
+        )
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onStart() {
         super.onStart()
-
-        val viewModel: StoreFeedViewModel by lazy {
-            viewModelFactory.get<StoreFeedViewModel>(
-            requireActivity()
-            )
-        }
 
         viewModel.storesData.observe(this, Observer {
             swipeRefreshLayout.isRefreshing = false
@@ -73,7 +74,12 @@ class StoreFeedFragment : Fragment() {
         // Enable if Swipe-To-Refresh functionality will be needed
         swipeRefreshLayout.isEnabled = true
 
-        storeFeedAdapter = StoreFeedAdapter()
+        storeFeedAdapter = StoreFeedAdapter(object : ItemClickListener {
+            override fun itemClick(id: String, isChecked: Boolean) {
+                viewModel.updateFavState(id, isChecked)
+            }
+        })
+
         recyclerView = view.findViewById(R.id.stores_view)
         recyclerView.apply {
             setHasFixedSize(true)

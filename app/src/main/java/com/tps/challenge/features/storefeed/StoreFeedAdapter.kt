@@ -16,7 +16,7 @@ import com.tps.challenge.network.model.StoreResponse
 /**
  * A RecyclerView.Adapter to populate the screen with a store feed.
  */
-class StoreFeedAdapter: RecyclerView.Adapter<StoreItemViewHolder>(), Favorite {
+class StoreFeedAdapter(private var itemClickListener: ItemClickListener): RecyclerView.Adapter<StoreItemViewHolder>() {
 
     var stores = listOf<StoreResponse>()
 
@@ -29,31 +29,27 @@ class StoreFeedAdapter: RecyclerView.Adapter<StoreItemViewHolder>(), Favorite {
 
     override fun onBindViewHolder(holder: StoreItemViewHolder, position: Int) {
         val item = stores[position]
-        holder.bind(item)
+        holder.bind(item, itemClickListener)
     }
 
     override fun getItemCount() = stores.size
 
-
-    override fun favoriteItem() {
-
+    interface ItemClickListener {
+        fun itemClick(id: String, isChecked: Boolean)
     }
-}
-
-interface Favorite {
-    fun favoriteItem()
 }
 
 /**
  * Holds the view for the Store item.
  */
 class StoreItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(item: StoreResponse) {
+    fun bind(item: StoreResponse, itemClickListener: StoreFeedAdapter.ItemClickListener) {
         with(itemView) {
             findViewById<TextView>(R.id.name).text = item.name
             findViewById<TextView>(R.id.description).text = item.description
 
             findViewById<ToggleButton>(R.id.btn_fav).setOnCheckedChangeListener { _, isChecked ->
+                itemClickListener.itemClick(item.id, isChecked)
                 findViewById<ToggleButton>(R.id.btn_fav).isChecked = isChecked
             }
 
@@ -62,7 +58,6 @@ class StoreItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 intent.putExtra(Constants.INTENT_ID, item.id)
                 intent.putExtra(Constants.INTENT_FAV_STATE, findViewById<ToggleButton>(R.id.btn_fav).isChecked)
                 itemView.context.startActivity(intent)
-
             }
         }
     }

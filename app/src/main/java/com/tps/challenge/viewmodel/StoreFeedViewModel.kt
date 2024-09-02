@@ -1,6 +1,7 @@
 package com.tps.challenge.viewmodel
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -38,7 +39,12 @@ class StoreFeedViewModel @Inject constructor(
 
     @SuppressLint("CheckResult")
     fun updateFavState(id: String, isFav: Boolean) {
-        _storesData.map { it.singleOrNull{ store -> store.id == id}?.fav = isFav }
+        Log.v("Saurabh", "isFav: $isFav")
+        Log.v("Saurabh", "id: $id")
+        _storesData.value = _storesData.value?.map { store ->
+            if (store.id == id) store.copy(fav = isFav) else store
+        }
+        Log.v("Saurabh", "updated list: ${_storesData.value}")
     }
 
 }
