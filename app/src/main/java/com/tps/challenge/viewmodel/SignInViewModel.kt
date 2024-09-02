@@ -18,13 +18,17 @@ class SignInViewModel @Inject constructor(private val applicationContext: Contex
     }
 
     private fun createSharedPrefs() {
-        sharedPreferences = EncryptedSharedPreferences.create(
-            "dd_secure_prefs",
-            "dd_keyset_alias",
-            applicationContext,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
+        try {
+            sharedPreferences = EncryptedSharedPreferences.create(
+                "dd_secure_prefs",
+                "dd_keyset_alias",
+                applicationContext,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun isUserSignedIn(): Boolean {
