@@ -39,12 +39,13 @@ class StoreFeedViewModel @Inject constructor(
 
     @SuppressLint("CheckResult")
     fun updateFavState(id: String, isFav: Boolean) {
-        Log.v("Saurabh", "isFav: $isFav")
-        Log.v("Saurabh", "id: $id")
         _storesData.value = _storesData.value?.map { store ->
             if (store.id == id) store.copy(fav = isFav) else store
         }
-        Log.v("Saurabh", "updated list: ${_storesData.value}")
+    }
+
+    fun updateStores(stores: List<StoreResponse>) {
+        _storesData.value = stores
     }
 
 }
