@@ -11,9 +11,9 @@ import com.tps.challenge.network.model.StoreResponse
 interface StoresListDao {
 
     @Query("SELECT * FROM $TABLE_STORES_LIST")
-    fun getAllStores(): List<StoreResponse>?
+    suspend fun getAllStores(): List<StoreResponse>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(employeesResponseList: List<StoreResponse>?)
+    suspend fun insertAll(employeesResponseList: List<StoreResponse>?)
 
 }

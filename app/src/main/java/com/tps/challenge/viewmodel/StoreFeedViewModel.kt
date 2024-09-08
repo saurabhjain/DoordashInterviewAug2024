@@ -23,7 +23,7 @@ class StoreFeedViewModel @Inject constructor(
         getAllStoresFromDB()
     }
 
-    private fun getAllStoresFromDB() {
+    fun getAllStoresFromDB() {
         viewModelScope.launch {
             try {
                 _storesData.value = repository.getAllStoresFromDB()

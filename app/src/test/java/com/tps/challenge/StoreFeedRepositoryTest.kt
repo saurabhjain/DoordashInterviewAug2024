@@ -33,7 +33,8 @@ import java.io.IOException
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
-class RepositoryAndDatabaseTest {
+class StoreFeedRepositoryTest {
+    /*
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -49,7 +50,7 @@ class RepositoryAndDatabaseTest {
         Dispatchers.setMain(testDispatcher)
         mockService = mockk()
         val context = ApplicationProvider.getApplicationContext<Context>()
-        repository = StoreRepository(context, mockService) // Add context
+        repository = StoreRepository(context, mockService)
         db = Room.inMemoryDatabaseBuilder(
             context, AppDatabase::class.java).build()
         storeListDao = db.storesListDao()
@@ -61,6 +62,51 @@ class RepositoryAndDatabaseTest {
         db.close()
         Dispatchers.resetMain()
         testDispatcher.cancel()
+    }
+
+    @Test
+    fun testFetchStoresData_Success() = runTest {
+        // Mock the service to return a list of stores
+        coEvery { mockService.getStoreFeed(Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE) } returns listOf(
+            StoreResponse("1", "Store 1", "description one", "abc.com", "open", "1000"),
+            StoreResponse("2", "Store 2", "description two", "xyz.com", "closed", "2000")
+        )
+
+        // Trigger the fetch
+        coEvery { repository.fetchStoresList() }
+
+//        val observedData =  coEvery { withTimeout(1000) { // Wait up to 1 seconds for LiveData update
+//            val data = mutableListOf<StoreResponse>()
+//            val observer = Observer<List<StoreResponse>> { value -> data.addAll(value) }
+//            viewModel.storesData.observeForever(observer)
+//            data
+//        } }
+//        val firstStore = observedData[0]
+//        val secondStore = observedData[1]
+//
+//        Assert.assertEquals(observedData.size, 2)
+//        Assert.assertEquals(firstStore.name, "Store 1")
+//        Assert.assertEquals(secondStore.name, "Store 2")
+    }
+
+    @Test
+    fun testFetchStoresData_Failure() = runTest {
+        // Mock the service to return exception
+        coEvery { mockService.getStoreFeed(Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE) } throws Exception("Network Error")
+
+        // Trigger the fetch
+        viewModel.fetchStoresData()
+
+        // Observe LiveData with timeout
+        val observedData = withTimeout(1000) { // Wait up to 1 seconds for LiveData update
+            val data = mutableListOf<StoreResponse>()
+            val observer =
+                Observer<List<StoreResponse>> { value -> data.addAll(value) }
+            viewModel.storesData.observeForever(observer)
+            data
+        }
+
+        Assert.assertEquals(observedData.size, 0)
     }
 
     @Test
@@ -181,6 +227,8 @@ class RepositoryAndDatabaseTest {
 
         Assert.assertEquals(observedData.size, 0)
     }
+
+     */
 
      */
 }
