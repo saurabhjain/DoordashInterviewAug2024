@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.security.crypto.EncryptedSharedPreferences
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,13 +18,7 @@ class SignInViewModel @Inject constructor(private val applicationContext: Contex
 
     private fun createSharedPrefs() {
         try {
-            sharedPreferences = EncryptedSharedPreferences.create(
-                "dd_secure_prefs",
-                "dd_keyset_alias",
-                applicationContext,
-                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-            )
+            sharedPreferences = applicationContext.getSharedPreferences("dd_prefs",Context.MODE_PRIVATE)
         } catch (e: Exception) {
             e.printStackTrace()
         }
