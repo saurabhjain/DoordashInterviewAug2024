@@ -55,7 +55,7 @@ class StoreFeedViewModelTest {
         // Trigger the fetch
         viewModel.fetchStoresData()
 
-        val observedData = withTimeout(2000) { // Wait up to 2 seconds for LiveData update
+        val observedData = withTimeout(1000) { // Wait up to 1 seconds for LiveData update
             val data = mutableListOf<StoreResponse>()
             val observer =
                 Observer<List<StoreResponse>> { value -> data.addAll(value) }

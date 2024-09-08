@@ -22,7 +22,6 @@ class StoreDetailViewModel @Inject constructor(
     fun fetchStoreDetailData(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.v("Saurabh", "id: $id")
                 _storeDetailData.postValue(service.getStoreDetails(id))
             } catch (e: Exception) {
                 e.printStackTrace()

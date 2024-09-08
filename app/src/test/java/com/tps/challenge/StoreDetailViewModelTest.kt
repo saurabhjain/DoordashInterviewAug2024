@@ -2,10 +2,10 @@ package com.tps.challenge
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.nhaarman.mockitokotlin2.mock
 import com.tps.challenge.network.TPSCoroutineService
 import com.tps.challenge.network.model.StoreAddressResponse
 import com.tps.challenge.network.model.StoreDetailsResponse
-import com.tps.challenge.network.model.StoreResponse
 import com.tps.challenge.viewmodel.StoreDetailViewModel
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -22,7 +22,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.mock
 
 @ExperimentalCoroutinesApi
 class StoreDetailViewModelTest {
@@ -48,32 +47,31 @@ class StoreDetailViewModelTest {
     }
 
     @Test
-    fun testFetchStoresData_Success() = runTest {
-        // Mock the service to return a list of stores
+    fun testFetchStoreData_Success() = runTest {
+        // Mock the service to return a single stores
         val storeDetail = StoreDetailsResponse("1", "Store 1", "description one",
             "abc.com", "open", "1000", "", 500,
-            listOf("", ""), StoreAddressResponse(""))
+            listOf(""), StoreAddressResponse(""))
 
         coEvery { mockService.getStoreDetails("62087") } returns storeDetail
 
         // Trigger the fetch
         viewModel.fetchStoreDetailData("62087")
 
-        val observedData = withTimeout(2000) { // Wait up to 1 seconds for LiveData update
-            val data = StoreDetailsResponse()
+        val observedData = withTimeout(1000) { // Wait up to 1 seconds for LiveData update
+            var data = mock<StoreDetailsResponse>()
             val observer =
-                Observer<StoreDetailsResponse> { }
+                Observer<StoreDetailsResponse> { value -> data = value.copy() }
             viewModel.storeDetailData.observeForever(observer)
             data
         }
-        val store = observedData
 
-        // Assert.assertEquals(observedData.size, 1)
-        Assert.assertEquals(store.name, "Store 1")
+        Assert.assertEquals(observedData, storeDetail)
+        Assert.assertEquals(observedData.name, "Store 1")
     }
 
     @Test
-    fun testFetchStoresData_Failure() = runTest {
+    fun testFetchStoreData_Failure() = runTest {
         // Mock the service to return exception
         coEvery { mockService.getStoreDetails("62087") } throws Exception("Network Error")
 
@@ -82,14 +80,14 @@ class StoreDetailViewModelTest {
 
         // Observe LiveData with timeout
         val observedData = withTimeout(1000) { // Wait up to 1 seconds for LiveData update
-            val data = StoreResponse()
+            val data = mock<StoreDetailsResponse>()
             val observer =
-                Observer<StoreResponse> { value -> data.addAll(value) }
+                Observer<StoreDetailsResponse> { }
             viewModel.storeDetailData.observeForever(observer)
             data
         }
 
-        Assert.assertEquals(observedData, null)
+        Assert.assertEquals(observedData.id, null)
     }
 
 }
