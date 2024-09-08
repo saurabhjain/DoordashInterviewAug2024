@@ -2,6 +2,7 @@ package com.tps.challenge
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.tps.challenge.network.model.StoreResponse
 import com.tps.challenge.viewmodel.StoreFeedViewModel
 import io.mockk.coEvery
@@ -19,12 +20,17 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import repository.StoreRepository
 
+@RunWith(AndroidJUnit4::class)
 @ExperimentalCoroutinesApi
 class StoreFeedViewModelTest {
 
+
+
     /*
+
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -98,9 +104,7 @@ class StoreFeedViewModelTest {
         Assert.assertEquals(secondStore.name, "Store 2")
     }
 
-     */
 
-    /*
     @Test
     fun testInsertAllStores_Success() = runTest {
 
@@ -112,7 +116,7 @@ class StoreFeedViewModelTest {
         coEvery { mockRepository.insertAllStoresInDB(storesListToInsert) }
 
         // Trigger the fetch
-        mockRepository.fetchStoresData()
+        mockRepository.fetchStoresList()
 
         // Observe LiveData with timeout
         val observedData = withTimeout(1000) { // Wait up to 1 seconds for LiveData update
@@ -126,6 +130,8 @@ class StoreFeedViewModelTest {
         Assert.assertEquals(observedData.size, 0)
     }
 
+
      */
+
 
 }
