@@ -17,5 +17,6 @@ data class StoreResponse(
     @SerializedName("status")
     val status: String,
     @SerializedName("delivery_fee")
-    val deliveryFeeCents: String
+    val deliveryFeeCents: String,
+    var fav: Boolean,
 )

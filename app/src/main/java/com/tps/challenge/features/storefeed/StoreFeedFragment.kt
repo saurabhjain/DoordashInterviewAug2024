@@ -31,15 +31,15 @@ class StoreFeedFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory<StoreFeedViewModel>
 
+    val viewModel: StoreFeedViewModel by lazy {
+        viewModelFactory.get<StoreFeedViewModel>(
+            requireActivity()
+        )
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onStart() {
         super.onStart()
-
-        val viewModel: StoreFeedViewModel by lazy {
-            viewModelFactory.get<StoreFeedViewModel>(
-            requireActivity()
-            )
-        }
 
         viewModel.storesData.observe(this, Observer {
             swipeRefreshLayout.isRefreshing = false
@@ -73,7 +73,11 @@ class StoreFeedFragment : Fragment() {
         // Enable if Swipe-To-Refresh functionality will be needed
         swipeRefreshLayout.isEnabled = true
 
-        storeFeedAdapter = StoreFeedAdapter()
+        storeFeedAdapter = StoreFeedAdapter(object : StoreFeedAdapter.ItemClickListener {
+            override fun itemClick(id: String, isChecked: Boolean) {
+                viewModel.updateFavState(id, isChecked)
+            }
+        })
         recyclerView = view.findViewById(R.id.stores_view)
         recyclerView.apply {
             setHasFixedSize(true)

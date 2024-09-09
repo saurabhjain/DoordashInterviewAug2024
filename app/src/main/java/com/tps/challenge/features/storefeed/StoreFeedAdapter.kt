@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
 import com.tps.challenge.R
 import com.tps.challenge.network.model.StoreResponse
@@ -11,7 +12,7 @@ import com.tps.challenge.network.model.StoreResponse
 /**
  * A RecyclerView.Adapter to populate the screen with a store feed.
  */
-class StoreFeedAdapter: RecyclerView.Adapter<StoreItemViewHolder>() {
+class StoreFeedAdapter(private var itemClickListener: ItemClickListener): RecyclerView.Adapter<StoreItemViewHolder>() {
 
     var stores = listOf<StoreResponse>()
 
@@ -24,20 +25,29 @@ class StoreFeedAdapter: RecyclerView.Adapter<StoreItemViewHolder>() {
 
     override fun onBindViewHolder(holder: StoreItemViewHolder, position: Int) {
         val item = stores[position]
-        holder.bind(item)
+        holder.bind(item, itemClickListener)
     }
 
     override fun getItemCount() = stores.size
+
+    interface ItemClickListener {
+        fun itemClick(id: String, isChecked: Boolean)
+    }
 }
 
 /**
  * Holds the view for the Store item.
  */
 class StoreItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(item: StoreResponse) {
+    fun bind(item: StoreResponse, itemClickListener: StoreFeedAdapter.ItemClickListener) {
         with(itemView) {
             findViewById<TextView>(R.id.name).text = item.name
             findViewById<TextView>(R.id.description).text = item.description
+
+            findViewById<ToggleButton>(R.id.btn_fav).setOnCheckedChangeListener { _, isChecked ->
+                itemClickListener.itemClick(item.id, isChecked)
+                findViewById<ToggleButton>(R.id.btn_fav).isChecked = isChecked
+            }
         }
     }
 }

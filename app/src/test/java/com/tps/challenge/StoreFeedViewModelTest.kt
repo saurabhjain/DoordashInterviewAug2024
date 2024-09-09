@@ -17,6 +17,7 @@ import kotlinx.coroutines.test.setMain
 import kotlinx.coroutines.withTimeout
 import org.junit.After
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -48,8 +49,8 @@ class StoreFeedViewModelTest {
     fun testFetchStoresData_Success() = runTest {
         // Mock the service to return a list of stores
         coEvery { mockService.getStoreFeed(Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE) } returns listOf(
-            StoreResponse("1", "Store 1", "description one", "abc.com", "open", "1000"),
-            StoreResponse("2", "Store 2", "description two", "xyz.com", "closed", "2000")
+            StoreResponse("1", "Store 1", "description one", "abc.com", "open", "1000", fav = false),
+            StoreResponse("2", "Store 2", "description two", "xyz.com", "closed", "2000", fav = false)
         )
 
         // Trigger the fetch
@@ -88,6 +89,33 @@ class StoreFeedViewModelTest {
         }
 
         Assert.assertEquals(observedData.size, 0)
+    }
+
+    @Test
+    fun testUpdateFav() {
+        val initialStores = listOf(
+            StoreResponse("1", "Store 1", "description one", "abc.com", "open", "1000", fav = false),
+            StoreResponse("2", "Store 2", "description two", "xyz.com", "closed", "2000", fav = true),
+            StoreResponse("3", "Store 3", "description three", "qwe.com", "open", "3000", fav = false)
+        )
+
+        // Create a mock observer to observe LiveData changes
+        val observer: Observer<List<StoreResponse>> = mockk(relaxed = true)
+        viewModel.storesData.observeForever(observer)
+
+        // Set the initial stores data (we cannot set _storesData directly, so simulate a data fetch)
+        viewModel.fetchStoresData()
+        viewModel.updateStores(initialStores)
+
+        // When: Update fav state for the store with id "2" to false
+        viewModel.updateFavState("2", false)
+
+        // Then: Check if the favorite state was updated correctly
+        val updatedStores = viewModel.storesData.value
+        assertEquals(false, updatedStores?.find { it.id == "2" }?.fav) // Store with id "2" should have fav as false
+        assertEquals(false, updatedStores?.find { it.id == "1" }?.fav) // Store with id "1" should remain unchanged
+        assertEquals(false, updatedStores?.find { it.id == "3" }?.fav) // Store with id "3" should remain unchanged
+
     }
 
 }
