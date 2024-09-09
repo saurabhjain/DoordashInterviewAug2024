@@ -1,11 +1,16 @@
 package com.tps.challenge.network.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.tps.challenge.database.TABLE_STORES_LIST
 
 /**
  * Store remote data model.
  */
+@Entity(tableName = TABLE_STORES_LIST)
 data class StoreResponse(
+    @PrimaryKey
     @SerializedName("id")
     val id: String,
     @SerializedName("name")
