@@ -2,6 +2,7 @@ package com.tps.challenge.network
 
 import com.tps.challenge.network.model.StoreDetailsResponse
 import com.tps.challenge.network.model.StoreResponse
+import com.tps.challenge.network.model.UserTokenResponse
 import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.http.GET
@@ -50,6 +51,32 @@ interface TPSCoroutineService {
     suspend fun getStoreDetails(
         @Path("id") storeId: String
     ): StoreDetailsResponse
+
+    /**
+     * Returns User Token.
+     */
+    @GET("v1/auth/token")
+    suspend fun getUserToken(
+        @Query("email") email: String,
+        @Query("password") password: String
+    ): UserTokenResponse
+
+    /*
+API specification
+https://dd-interview.github.io/android/v1/auth/token?email=<EMAIL>&password=<PASSWORD>
+
+Method: GET
+
+Request:
+Obtain user entered email and password and add respective query params to the request: ?email=<email>&password=<PASSWORD>
+
+
+Response:
+{
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ */
+
+
 }
 
 /**

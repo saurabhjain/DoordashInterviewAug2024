@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_ev_username_top">100dp</dimen>
+    <dimen name="margin_ev_pw_top">16dp</dimen>
+    <dimen name="ev_width">200dp</dimen>
+</resources>
