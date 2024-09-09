@@ -7,10 +7,15 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
+import com.tps.challenge.network.TPSCoroutineService
+import com.tps.challenge.network.model.StoreResponse
 import com.tps.challenge.viewmodel.SignInViewModel
+import io.mockk.coEvery
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -36,19 +41,21 @@ class SignInViewModelTest {
     private lateinit var editor: SharedPreferences.Editor
 
     private lateinit var viewModel: SignInViewModel
+    private lateinit var mockService: TPSCoroutineService
 
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
         val context = ApplicationProvider.getApplicationContext<Context>()
+        mockService = mockk()
 
         MockitoAnnotations.openMocks(this)
         `when`(context.getSharedPreferences(anyString(), anyInt())).thenReturn(sharedPreferences)
         `when`(sharedPreferences.edit()).thenReturn(editor)
         `when`(editor.putString(anyString(), anyString())).thenReturn(editor)
 
-        viewModel = SignInViewModel(context)
+        viewModel = SignInViewModel(mockService, context) // mockService is not needed if there is no api call
     }
 
     @Test
@@ -83,4 +90,36 @@ class SignInViewModelTest {
         verify(editor).putString("password", password)
         verify(editor, times(2)).apply()
     }
+
+    /*
+
+    @Test
+    fun testFetchToken_Success() = runTest {
+        val username = "test_user"
+        val password = "test_password"
+
+        coEvery { mockService.getUserToken(anyString(), anyString()) } returns Unit
+
+        viewModel.getTokenAndSignIn(username, password)
+
+        viewModel.saveUserCredentials(username, password) // update this to token only
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        verify(editor).putString("token", token)
+        verify(editor).apply()
+    }
+
+    @Test
+    fun testFetchToken_Error() = runTest {
+        val username = "test_user"
+        val password = "test_password"
+
+        coEvery { mockService.getUserToken(anyString(), anyString()) } throws Exception("Network Error")
+
+        viewModel.getTokenAndSignIn(username, password)
+
+        Assert.assertEquals(sharedPreferences.getString("token", "null"), null)
+    }
+
+     */
 }

@@ -4,10 +4,14 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tps.challenge.network.TPSCoroutineService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SignInViewModel @Inject constructor(private val applicationContext: Context) : ViewModel() {
+class SignInViewModel @Inject constructor(
+    private val service: TPSCoroutineService,
+    private val applicationContext: Context) : ViewModel() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -35,6 +39,7 @@ class SignInViewModel @Inject constructor(private val applicationContext: Contex
         return false
     }
 
+    // this call should be replaced with getTokenAndSignIn if a token api is given
     fun saveUserCredentials(username: String, password: String) {
         viewModelScope.launch {
             try {
@@ -45,5 +50,21 @@ class SignInViewModel @Inject constructor(private val applicationContext: Contex
             }
         }
     }
+
+    /*
+    fun getTokenAndSignIn(username: String, password: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val token =  "server_token" //service.getUserToken(username, password) Update this api call to given token call
+                if(token.isNotEmpty()) {
+                    sharedPreferences.edit().putString("token", token).apply() // Suggest usage of Android Keystore and encryption
+                    // or call saveUserCredentials and pass token to it to make UT easy
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+     */
 
 }
