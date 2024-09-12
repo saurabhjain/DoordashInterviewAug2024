@@ -60,23 +60,6 @@ interface TPSCoroutineService {
         @Query("email") email: String,
         @Query("password") password: String
     ): UserTokenResponse
-
-    /*
-API specification
-https://dd-interview.github.io/android/v1/auth/token?email=<EMAIL>&password=<PASSWORD>
-
-Method: GET
-
-Request:
-Obtain user entered email and password and add respective query params to the request: ?email=<email>&password=<PASSWORD>
-
-
-Response:
-{
-"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
- */
-
-
 }
 
 /**
